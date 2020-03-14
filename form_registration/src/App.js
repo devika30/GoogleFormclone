@@ -3,8 +3,16 @@ import AddInput from './AddInput'
 
 class App extends Component{
   state={
-    inputs:[]
+    inputs:[],
+    title:'',
+    description:''
   }
+  handleChange =(e)=>{
+    this.setState({
+        [e.target.id]:e.target.value
+        });
+   }
+
   addinput=(form)=>{
     form.id = Math.random();
     let forms = [...this.state.inputs, form];
@@ -24,10 +32,16 @@ class App extends Component{
 
   render()
   {
+    console.log(this.state)
     return(
       <div className="App container">
-      <h1 className="text-center m-4">Form</h1>
-      
+         <label htmlFor="question">Title:</label>
+      <input  className=" form-control mt-2" id="title" onChange={this.handleChange} value={this.state.title} required/>
+      <br/>
+      <label htmlFor="question">description:</label>
+
+      <input  className="form-control mt-2" id="description" onChange={this.handleChange} value={this.state.description} required/>
+
       <AddInput addinput={this.addinput} inputs={this.state.inputs} deleteinput={this.deleteinput}/>
     </div>
     )

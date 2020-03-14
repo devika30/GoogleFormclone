@@ -10,8 +10,9 @@ import { Switch, Case, Default } from 'react-if';
 class AddInput extends Component{
   state={
     type:'',
-    question:''
-  }
+    question:'',
+    description_input:''
+   }
   handleChange =(e)=>{
    this.setState({
        [e.target.id]:e.target.value
@@ -64,8 +65,9 @@ class AddInput extends Component{
         <div className="form-group col-6">
           <label htmlFor="question">Question:</label>
            <input className="form-control" id="question" onChange={this.handleChange} value={this.state.question} required/>
-           
-          </div>
+           <label htmlFor="description">Description:</label>
+           <input className="form-control" id="description_input"  onChange={this.handleChange} value={this.state.description_input}/>
+           </div>
            <div className="form-group col-6">
              <label htmlFor="type">Type</label>
              <select className="form-control" id="type" onChange={this.handleChange}>
