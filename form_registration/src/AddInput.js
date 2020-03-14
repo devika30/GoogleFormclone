@@ -1,6 +1,4 @@
 import React, { Component, Fragment } from 'react';
-//import AddOption from './AddOption';
-//import { If, Then, Else, When, Unless, Switch, Case, Default } from 'react-if';
 import { Switch, Case, Default } from 'react-if';
 // import AddOption from './AddOption';
 
@@ -8,7 +6,8 @@ class AddInput extends Component {
   state = {
     type: '',
     question: '',
-    description_input: ''
+    description_input: '',
+    required: false
   };
   handleChange = e => {
     this.setState({
@@ -19,20 +18,35 @@ class AddInput extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.addinput(this.state);
+    this.setState({
+      type: '',
+      question: '',
+      description_input: '',
+      required: true
+    });
+  };
+
+  handleCheck = () => {
+    this.setState({ required: !this.state.required }, () => {
+      console.log(this.state);
+    });
   };
 
   render() {
     const { inputs, deleteinput } = this.props;
-    console.log(this.props);
     const inputList = inputs.map(input => {
       return (
-        <div key={input.id} className='ml-3'>
+        <div key={input.id} className='q-card'>
           <div className='form-group'>
-            <label htmlFor='usr'>{input.question}</label>
-            <br />
-            <label htmlFor='usr'>Description:{input.description_input}</label>
+            <label htmlFor='usr' className='question-label'>
+              {input.question}
+            </label>
+
+            <label htmlFor='usr' className='description-label'>
+              {input.description_input}
+            </label>
             <div className='row'>
-              <div className='col-6'>
+              <div className='col-10'>
                 <Switch>
                   <Case condition={input.type === 'textarea'}>
                     <textarea rows='4' cols='50' />
@@ -42,20 +56,19 @@ class AddInput extends Component {
                   </Case>
 
                   <Default>
-                    <input
-                      type={input.type}
-                      className='form-control'
-                      id='usr'
-                    />
+                    <input type={input.type} className='q-input' id='usr' />
                   </Default>
                 </Switch>
               </div>
-              <div className='col-6'>
+              <div className='col-2'>
                 <button
                   className='btn btn-danger d-inline'
                   onClick={() => {
                     deleteinput(input.id);
                   }}
+                  data-toggle='tooltip'
+                  data-placement='bottom'
+                  title='Delete Question'
                 >
                   <i className='fas fa-trash-alt'></i>
                 </button>
@@ -68,44 +81,66 @@ class AddInput extends Component {
     return (
       <Fragment>
         {inputList}
-        <form onSubmit={this.handleSubmit} className='container'>
+        <form onSubmit={this.handleSubmit} className='container q-card q-card1'>
           <div className='row'>
             <div className='form-group col-6'>
-              <label htmlFor='question'>Question:</label>
+              {/* <label htmlFor='question'>Question:</label> */}
               <input
-                className='form-control'
                 id='question'
                 onChange={this.handleChange}
                 value={this.state.question}
+                placeholder='Question'
                 required
               />
-              <label htmlFor='description'>Description:</label>
+              {/* <label htmlFor='description'>Description:</label> */}
               <input
-                className='form-control'
                 id='description_input'
                 onChange={this.handleChange}
+                placeholder='Description'
                 value={this.state.description_input}
               />
             </div>
             <div className='form-group col-6'>
-              <label htmlFor='type'>Type</label>
+              <label htmlFor='type' id='type'>
+                Type
+              </label>
               <select
                 className='form-control'
                 id='type'
                 onChange={this.handleChange}
+                required
               >
                 <option></option>
-                <option value='text'>Text</option>
-                <option value='check_box'>Check-Box</option>
-                <option value='date'>Date</option>
-                <option value='number'>Number</option>
+                <option value='text'>Short Answer</option>
+                <option value='textarea'>Paragraph</option>
                 <option value='email'>Email</option>
-                <option value='password'>Password</option>
-                <option value='textarea'>TextArea</option>
+                <option value='number'>Number</option>
+                <option value='date'>Date</option>
+                <option value='check_box'>Check-Box</option>
               </select>
             </div>
           </div>
-          <button className='btn btn-primary'>Submit</button>
+          <hr />
+          <div className='q-foot'>
+            <span id='required-check'>
+              <input
+                type='checkbox'
+                onChange={this.handleCheck}
+                defaultChecked={this.state.required}
+                className='mr-2'
+              />
+              Required
+            </span>
+
+            <button
+              className='button-add'
+              data-toggle='tooltip'
+              data-placement='bottom'
+              title='Add Question'
+            >
+              <i class='fas fa-plus'></i>&nbsp;Add
+            </button>
+          </div>
         </form>
       </Fragment>
     );

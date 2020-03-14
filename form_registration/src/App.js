@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import AddInput from './AddInput';
 import './index.css';
+
 class App extends Component {
   state = {
     inputs: [],
     title: '',
     description: ''
-  };
-  handleChange = e => {
-    this.setState({
-      [e.target.id]: e.target.value
-    });
   };
 
   addinput = form => {
@@ -19,6 +15,7 @@ class App extends Component {
     this.setState({
       inputs: forms
     });
+    console.log(this.state);
   };
   deleteinput = id => {
     let forms = this.state.inputs.filter(form => {
@@ -48,34 +45,41 @@ class App extends Component {
   render() {
     const title = this.state.title;
     const description = this.state.description;
-    console.log(this.state);
     return (
       <div className='App container'>
-        <div className='card'>
-          <label htmlFor='question'>Title:{title}</label>
-          <form onSubmit={this.handleTitle}>
-            <input
-              ref={input => (this.titleInput = input)}
-              id='title'
-              required
-            />
-            <button type='submit' className='button'>
-              <i class='fas fa-check'></i>
-            </button>
-          </form>
-          <br />
-          <label htmlFor='question'>Description:{description}</label>
+        <div className='header-card '>
+          <div className='header-card-section'>
+            <label htmlFor='question' className='title-label'>
+              {title}
+            </label>
+            <form onSubmit={this.handleTitle}>
+              <input
+                ref={input => (this.titleInput = input)}
+                id='title'
+                placeholder='Form Title'
+                required
+              />
+              <button type='submit' className='button'>
+                <i className='fas fa-check' style={{ color: '#fff' }}></i>
+              </button>
+            </form>
+            <br />
+            <label htmlFor='question' className='description-label'>
+              {description}
+            </label>
 
-          <form onSubmit={this.handleDesc}>
-            <input
-              id='description'
-              ref={input => (this.descInput = input)}
-              required
-            />
-            <button type='submit' className='button'>
-              <i class='fas fa-check'></i>
-            </button>
-          </form>
+            <form onSubmit={this.handleDesc}>
+              <input
+                id='description'
+                ref={input => (this.descInput = input)}
+                placeholder='Form Description'
+                required
+              />
+              <button type='submit' className='button'>
+                <i className='fas fa-check' style={{ color: '#fff' }}></i>
+              </button>
+            </form>
+          </div>
         </div>
 
         <AddInput
