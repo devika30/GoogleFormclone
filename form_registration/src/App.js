@@ -42,7 +42,7 @@ class App extends Component{
 
       <input  className="form-control mt-2" id="description" onChange={this.handleChange} value={this.state.description} required/>
 
-      <AddInput addinput={this.addinput} inputs={this.state.inputs} deleteinput={this.deleteinput}/>
+      <AddInput addinput={this.addinput} inputs={this.state.inputs} deleteinput={this.deleteinput} />
     </div>
     )
   }

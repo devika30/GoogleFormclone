@@ -33,6 +33,8 @@ class AddInput extends Component{
             <div key={input.id} className="ml-3">
                 <div className="form-group">
                     <label htmlFor="usr">{input.question}</label>
+                    <br/>
+                    <label htmlFor="usr">Description:{input.description_input}</label>
                    <div className="row">
                        <div className="col-6">
                        <Switch>
