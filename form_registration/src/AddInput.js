@@ -1,19 +1,39 @@
 import React, { Component, Fragment } from 'react';
 import { Switch, Case, Default } from 'react-if';
-// import AddOption from './AddOption';
-
+import AddRadio from './AddRadio';
+import AddCheckbox from './AddCheckbox'
+import AddDropdown from './AddDropdown'
 class AddInput extends Component {
   state = {
     type: '',
     question: '',
     description_input: '',
-    required: false
+    required: false,
+    options:[]
   };
   handleChange = e => {
     this.setState({
       [e.target.id]: e.target.value
     });
   };
+
+  addoption = option =>{
+    option.id=Math.random();
+    let choices=[...this.state.options,option]
+    this.setState({
+      options:choices
+    });
+  }
+
+
+  deleteoption = id =>{
+    let choices=this.state.options.filter(option=>{
+      return option.id!==id;
+    });
+    this.setState({
+      options:choices
+    })
+  }
 
   handleSubmit = e => {
     e.preventDefault();
@@ -51,9 +71,29 @@ class AddInput extends Component {
                   <Case condition={input.type === 'textarea'}>
                     <textarea rows='4' cols='50' />
                   </Case>
-                  <Case condition={input.type === 'check_box'}>
-                    {/* <AddOption /> */}
+                  <Case condition={input.type === 'mcq'}>
+                    <AddRadio 
+                    addoption={this.addoption}
+                    deleteoption={this.deleteoption}
+                    options={this.state.options}
+                                
+                    />
                   </Case>
+                  <Case condition={input.type==='checkbox'}>
+                    <AddCheckbox
+                    addoption={this.addoption}
+                    deleteoption={this.deleteoption}
+                    options={this.state.options}
+                    />
+                    </Case>
+
+                    <Case condition={input.type==='dropdown'}>
+                    <AddDropdown
+                    addoption={this.addoption}
+                    deleteoption={this.deleteoption}
+                    options={this.state.options}
+                    />
+                    </Case>
 
                   <Default>
                     <input type={input.type} className='q-input' id='usr' />
@@ -116,7 +156,9 @@ class AddInput extends Component {
                 <option value='email'>Email</option>
                 <option value='number'>Number</option>
                 <option value='date'>Date</option>
-                <option value='check_box'>Check-Box</option>
+                <option value='mcq'>Multiple Choice</option>
+                <option value='checkbox'>CheckBox</option>
+                <option value='dropdown'>Dropdown</option>
               </select>
             </div>
           </div>
@@ -138,7 +180,7 @@ class AddInput extends Component {
               data-placement='bottom'
               title='Add Question'
             >
-              <i class='fas fa-plus'></i>&nbsp;Add
+              <i className='fas fa-plus'></i>&nbsp;Add
             </button>
           </div>
         </form>
