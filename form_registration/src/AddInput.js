@@ -1,15 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { Switch, Case, Default } from 'react-if';
 import AddRadio from './AddRadio';
-import AddCheckbox from './AddCheckbox'
-import AddDropdown from './AddDropdown'
+import AddCheckbox from './AddCheckbox';
+import AddDropdown from './AddDropdown';
 class AddInput extends Component {
   state = {
     type: '',
     question: '',
     description_input: '',
     required: false,
-    options:[]
+    options: []
   };
   handleChange = e => {
     this.setState({
@@ -17,23 +17,27 @@ class AddInput extends Component {
     });
   };
 
-  addoption = option =>{
-    option.id=Math.random();
-    let choices=[...this.state.options,option]
-    this.setState({
-      options:choices
-    });
-  }
+  addoption = e => {
+    e.preventDefault();
+    var option = { value: this.dropdownOption.value };
+    option.id = Math.random();
+    let choices = [...this.state.options, option];
+    this.setState(
+      {
+        options: choices
+      },
+      () => console.log(this.state)
+    );
+  };
 
-
-  deleteoption = id =>{
-    let choices=this.state.options.filter(option=>{
-      return option.id!==id;
+  deleteoption = id => {
+    let choices = this.state.options.filter(option => {
+      return option.id !== id;
     });
     this.setState({
-      options:choices
-    })
-  }
+      options: choices
+    });
+  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -72,28 +76,23 @@ class AddInput extends Component {
                     <textarea rows='4' cols='50' />
                   </Case>
                   <Case condition={input.type === 'mcq'}>
-                    <AddRadio 
-                    addoption={this.addoption}
-                    deleteoption={this.deleteoption}
-                    options={this.state.options}
-                                
+                    <AddRadio
+                      addoption={this.addoption}
+                      deleteoption={this.deleteoption}
+                      options={this.state.options}
                     />
                   </Case>
-                  <Case condition={input.type==='checkbox'}>
+                  <Case condition={input.type === 'checkbox'}>
                     <AddCheckbox
-                    addoption={this.addoption}
-                    deleteoption={this.deleteoption}
-                    options={this.state.options}
+                      addoption={this.addoption}
+                      deleteoption={this.deleteoption}
+                      options={this.state.options}
                     />
-                    </Case>
+                  </Case>
 
-                    <Case condition={input.type==='dropdown'}>
-                    <AddDropdown
-                    addoption={this.addoption}
-                    deleteoption={this.deleteoption}
-                    options={this.state.options}
-                    />
-                    </Case>
+                  <Case condition={input.type === 'dropdown'}>
+                    <AddDropdown options={this.state.options} />
+                  </Case>
 
                   <Default>
                     <input type={input.type} className='q-input' id='usr' />
@@ -162,6 +161,7 @@ class AddInput extends Component {
               </select>
             </div>
           </div>
+
           <hr />
           <div className='q-foot'>
             <span id='required-check'>
@@ -184,6 +184,27 @@ class AddInput extends Component {
             </button>
           </div>
         </form>
+        <div className='row'>
+          <div className='col-12'>
+            {this.state.type == 'dropdown' ? (
+              <form onSubmit={this.addoption}>
+                <div className='form-group col-6'>
+                  <input
+                    className='form-control'
+                    id='options'
+                    ref={input => (this.dropdownOption = input)}
+                    placeholder='Add options to dropdown'
+                  />
+                  <button className='btn btn-primary' type='submit'>
+                    Add
+                  </button>
+                </div>
+              </form>
+            ) : (
+              ''
+            )}
+          </div>
+        </div>
       </Fragment>
     );
   }
