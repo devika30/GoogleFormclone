@@ -2,23 +2,7 @@ import React,{Component,Fragment} from 'react';
 
 
 class AddCheckbox extends Component{
-state={
-  name:''
-}
 
-handleChange =(e)=>{
-  this.setState({
-      [e.target.id]:e.target.value
-      });
- }
-
-handleSubmit=(e)=>{
-  e.preventDefault();
-  this.props.addoption(this.state);
-  this.setState({
-    name:''
-  });
-}
   render()
   {
     const {options,deleteoption}=this.props;
@@ -26,8 +10,8 @@ handleSubmit=(e)=>{
     const optionList=options.map(option=>{
       return(
         <div key={option.id}>
-           <input type="checkbox" id={option.options} name={option.options} value={option.options}/>
-           <label htmlfor={option.options}>{option.options}</label>
+           <input type="checkbox" id={option.value} name={option.value} value={option.value}/>
+           <label htmlfor={option.value}>{option.value}</label>
            <button
                   className='btn btn-danger'
                   onClick={() => {
@@ -45,12 +29,6 @@ handleSubmit=(e)=>{
     return(
      <Fragment>
         {optionList}
-     <form onSubmit={this.handleSubmit}>
-        <div className="form-group col-6">
-        <input className="form-control" id="options" onChange={this.handleChange}/>
-        <button className="btn btn-primary" type="submit">Add</button>
-        </div>
-     </form>
      </Fragment>
     )
   }

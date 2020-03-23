@@ -17,6 +17,7 @@ class AddInput extends Component {
     });
   };
 
+
   addoption = e => {
     e.preventDefault();
     var option = { value: this.dropdownOption.value };
@@ -28,6 +29,7 @@ class AddInput extends Component {
       },
       () => console.log(this.state)
     );
+    this.dropdownOption.value = ""
   };
 
   deleteoption = id => {
@@ -46,8 +48,7 @@ class AddInput extends Component {
       type: '',
       question: '',
       description_input: '',
-      required: true
-    });
+      required: true    });
   };
 
   handleCheck = () => {
@@ -58,6 +59,57 @@ class AddInput extends Component {
 
   render() {
     const { inputs, deleteinput } = this.props;
+    const optionList = this.state.options.map(option => {
+      return (
+        <Fragment key={option.id}>
+          <option value={option.value}>{option.value}</option>
+        </Fragment>
+      );
+    });
+
+    const checkboxList=this.state.options.map(option=>{
+      return(
+        <div key={option.id}>
+           <input type="checkbox" id={option.value} name={option.value} value={option.value}/>
+           <label htmlfor={option.value}>{option.value}</label>
+           <button
+                  className='btn btn-danger'
+                  onClick={() => {
+                    this.deleteoption(option.id);
+                  }}
+                  data-toggle='tooltip'
+                  data-placement='bottom'
+                  title='Delete Option'
+                >
+                  <i className='fas fa-trash-alt'></i>
+                </button>
+        </div>
+      )
+    })
+
+    const radioList=this.state.options.map(option=>{
+      return(
+        <div key={option.id}>
+           <input type="radio" id={option.value} name={option.value} value={option.value}/>
+           <label htmlfor={option.value}>{option.value}</label>
+           <button
+                  className='btn btn-danger'
+                  onClick={() => {
+                    this.deleteoption(option.id);
+                  }}
+                  data-toggle='tooltip'
+                  data-placement='bottom'
+                  title='Delete Option'
+                >
+                  <i className='fas fa-trash-alt'></i>
+                </button>
+        </div>
+      )
+    })
+
+
+
+
     const inputList = inputs.map(input => {
       return (
         <div key={input.id} className='q-card'>
@@ -76,16 +128,11 @@ class AddInput extends Component {
                     <textarea rows='4' cols='50' />
                   </Case>
                   <Case condition={input.type === 'mcq'}>
-                    <AddRadio
-                      addoption={this.addoption}
-                      deleteoption={this.deleteoption}
-                      options={this.state.options}
-                    />
-                  </Case>
+                  <input type="radio" id={input.options[0].value} name={input.options[0].value} value={input.options[0].value}/>
+                   <label htmlfor={input.options[0].value}>{input.options[0].value}</label>
+            </Case>
                   <Case condition={input.type === 'checkbox'}>
-                    <AddCheckbox
-                      addoption={this.addoption}
-                      deleteoption={this.deleteoption}
+                    <AddCheckbox 
                       options={this.state.options}
                     />
                   </Case>
@@ -120,7 +167,8 @@ class AddInput extends Component {
     return (
       <Fragment>
         {inputList}
-        <form onSubmit={this.handleSubmit} className='container q-card q-card1'>
+        <div className='q-card q-card1'>
+        <form onSubmit={this.handleSubmit} className='container '>
           <div className='row'>
             <div className='form-group col-6'>
               {/* <label htmlFor='question'>Question:</label> */}
@@ -186,7 +234,12 @@ class AddInput extends Component {
         </form>
         <div className='row'>
           <div className='col-12'>
-            {this.state.type == 'dropdown' ? (
+            {this.state.type === 'dropdown' ? (
+                <Fragment>
+                   <select id='dropdown-option' className='form-control mb-4 ml-3'>
+                 <option value=''>Select an option</option>
+                 {optionList}
+               </select>
               <form onSubmit={this.addoption}>
                 <div className='form-group col-6'>
                   <input
@@ -200,10 +253,60 @@ class AddInput extends Component {
                   </button>
                 </div>
               </form>
+                </Fragment>
             ) : (
               ''
             )}
           </div>
+        </div>
+        <div className='row'>
+          <div className='col-12'>
+            {this.state.type === 'checkbox' ? (
+              <Fragment>
+                {checkboxList}
+              <form onSubmit={this.addoption}>
+                <div className='form-group col-6'>
+                  <input
+                    className='form-control'
+                    id='options'
+                    ref={input => (this.dropdownOption = input)}
+                    placeholder='Add options to checkbox'
+                  />
+                  <button className='btn btn-primary' type='submit'>
+                    Add
+                  </button>
+                </div>
+              </form>
+              </Fragment>
+            ) : (
+              ''
+            )}
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-12'>
+            {this.state.type === 'mcq' ? (
+            <Fragment>
+              {radioList}
+                <form onSubmit={this.addoption}>
+                <div className='form-group col-6'>
+                  <input
+                    className='form-control'
+                    id='options'
+                    ref={input => (this.dropdownOption = input)}
+                    placeholder='Add options to checkbox'
+                  />
+                  <button className='btn btn-primary' type='submit'>
+                    Add
+                  </button>
+                </div>
+              </form>
+            </Fragment>
+            ) : (
+              ''
+            )}
+          </div>
+        </div>
         </div>
       </Fragment>
     );
